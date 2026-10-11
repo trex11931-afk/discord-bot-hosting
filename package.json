@@ -1,0 +1,22 @@
+{
+  "name": "marko-discord-hosting",
+  "version": "1.0.0",
+  "description": "MARKO Discord bot hosting platform with plans, coins, dashboard and admin management",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "hosting",
+    "dashboard",
+    "marko"
+  ],
+  "author": "MARKO Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

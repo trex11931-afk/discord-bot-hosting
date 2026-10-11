@@ -1,0 +1,308 @@
+const state = {
+  plans: [],
+  user: null,
+  bots: []
+};
+
+const authModal = document.getElementById('authModal');
+const authTitle = document.getElementById('modalTitle');
+const authForm = document.getElementById('authForm');
+const userNameField = document.getElementById('userName');
+const userEmailField = document.getElementById('userEmail');
+const userPasswordField = document.getElementById('userPassword');
+const authSubmitBtn = document.getElementById('authSubmitBtn');
+const dashboardShell = document.getElementById('dashboardShell');
+const plansGrid = document.getElementById('plansGrid');
+const botForm = document.getElementById('botForm');
+const topupForm = document.getElementById('topupForm');
+const adminPanel = document.getElementById('adminPanel');
+
+let authMode = 'login';
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(`/api${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || 'Something went wrong.');
+  }
+
+  return data;
+}
+
+function setSession(user) {
+  state.user = user;
+  localStorage.setItem('marko-user', JSON.stringify(user));
+  renderDashboard();
+}
+
+function clearSession() {
+  state.user = null;
+  localStorage.removeItem('marko-user');
+  dashboardShell.classList.add('hidden');
+}
+
+function openModal(mode) {
+  authMode = mode;
+  authTitle.textContent = mode === 'login' ? 'Login' : 'Create Account';
+  authSubmitBtn.textContent = mode === 'login' ? 'Login' : 'Create Account';
+
+  const shouldShowName = mode === 'register';
+  userNameField.classList.toggle('hidden-on-login', !shouldShowName);
+  userNameField.required = shouldShowName;
+  authModal.classList.remove('hidden');
+}
+
+function closeModal() {
+  authModal.classList.add('hidden');
+  authForm.reset();
+}
+
+function renderPlans() {
+  plansGrid.innerHTML = state.plans
+    .map(
+      (plan) => `
+        <article class="plan-card ${plan.popular ? 'popular' : ''}">
+          ${plan.popular ? '<span class="popular-badge">Popular</span>' : ''}
+          <h3>${plan.name}</h3>
+          <div class="plan-price">
+            <strong>$${plan.price}</strong>
+            <span>/ month</span>
+          </div>
+          <p>${plan.coins} coins included</p>
+          <ul>
+            ${plan.features.map((feature) => `<li>✓ ${feature}</li>`).join('')}
+          </ul>
+          <button class="${state.user ? 'primary-btn' : 'secondary-btn'}" data-plan-id="${plan.id}">
+            ${state.user ? 'Activate Plan' : 'Get Started'}
+          </button>
+        </article>
+      `
+    )
+    .join('');
+
+  document.querySelectorAll('[data-plan-id]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      if (!state.user) {
+        openModal('register');
+        return;
+      }
+
+      try {
+        const result = await apiRequest('/buy-plan', {
+          method: 'POST',
+          body: JSON.stringify({ userId: state.user.id, planId: button.dataset.planId })
+        });
+
+        alert(result.message);
+        await loadDashboard(state.user.id);
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  });
+}
+
+function renderBotList() {
+  const botList = document.getElementById('botList');
+  if (!state.bots.length) {
+    botList.innerHTML = '<p class="empty-state">No bots deployed yet. Create your first bot below.</p>';
+    return;
+  }
+
+  botList.innerHTML = state.bots
+    .map(
+      (bot) => `
+        <div class="bot-item">
+          <div class="bot-meta">
+            <div class="bot-avatar">${bot.name.slice(0, 1).toUpperCase()}</div>
+            <div class="bot-info">
+              <h4>${bot.name}</h4>
+              <p>${bot.prefix} • ${bot.region} • ${bot.storage} GB • ${bot.memory}</p>
+            </div>
+          </div>
+          <span class="bot-pill">${bot.status}</span>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderAdminPanel(data) {
+  if (!state.user || state.user.role !== 'admin') {
+    adminPanel.classList.add('hidden');
+    return;
+  }
+
+  adminPanel.classList.remove('hidden');
+  const adminStats = document.getElementById('adminStats');
+
+  adminStats.innerHTML = `
+    <div class="admin-stat-box"><span>Total Users</span><strong>${data.stats.users}</strong></div>
+    <div class="admin-stat-box"><span>Total Bots</span><strong>${data.stats.bots}</strong></div>
+    <div class="admin-stat-box"><span>Online Bots</span><strong>${data.stats.onlineBots}</strong></div>
+    <div class="admin-stat-box"><span>Revenue</span><strong>${data.stats.revenue}</strong></div>
+  `;
+}
+
+function renderDashboard() {
+  if (!state.user) {
+    dashboardShell.classList.add('hidden');
+    return;
+  }
+
+  dashboardShell.classList.remove('hidden');
+  document.getElementById('dashboardName').textContent = state.user.name;
+  document.getElementById('dashboardPlan').textContent = state.user.plan || 'Starter';
+  document.getElementById('dashboardCoins').textContent = state.user.coins ?? 0;
+  document.getElementById('dashboardStorage').textContent = `${state.user.storageLimit || 0} GB`;
+  document.getElementById('dashboardRole').textContent = state.user.role || 'User';
+  document.getElementById('dashboardAvatar').textContent = state.user.name.slice(0, 1).toUpperCase();
+
+  const statBots = document.getElementById('statBots');
+  const statOnline = document.getElementById('statOnline');
+  const statStorageUsed = document.getElementById('statStorageUsed');
+
+  statBots.textContent = state.bots.length;
+  statOnline.textContent = state.bots.filter((bot) => bot.status === 'online').length;
+  statStorageUsed.textContent = `${state.bots.reduce((sum, bot) => sum + Number(bot.storage || 0), 0)} GB`;
+
+  renderBotList();
+}
+
+async function loadDashboard(userId) {
+  try {
+    const data = await apiRequest(`/dashboard/${userId}`);
+    state.user = data.user;
+    state.bots = data.bots || [];
+    renderDashboard();
+
+    if (state.user.role === 'admin') {
+      const adminData = await apiRequest('/admin');
+      renderAdminPanel(adminData);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function init() {
+  try {
+    const plans = await apiRequest('/plans');
+    state.plans = plans;
+    renderPlans();
+  } catch (error) {
+    console.error(error);
+  }
+
+  const savedUser = localStorage.getItem('marko-user');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      state.user = user;
+      await loadDashboard(user.id);
+    } catch (error) {
+      localStorage.removeItem('marko-user');
+    }
+  }
+}
+
+document.getElementById('loginBtn').addEventListener('click', () => openModal('login'));
+document.getElementById('signupBtn').addEventListener('click', () => openModal('register'));
+document.getElementById('heroSignup').addEventListener('click', () => openModal('register'));
+document.getElementById('viewPricingBtn').addEventListener('click', () => {
+  document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+authForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const payload = {
+    name: authMode === 'register' ? userNameField.value.trim() : undefined,
+    email: userEmailField.value.trim(),
+    password: userPasswordField.value
+  };
+
+  try {
+    const result = authMode === 'register'
+      ? await apiRequest('/register', { method: 'POST', body: JSON.stringify(payload) })
+      : await apiRequest('/login', { method: 'POST', body: JSON.stringify(payload) });
+
+    setSession(result.user);
+    closeModal();
+    await loadDashboard(result.user.id);
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+botForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!state.user) {
+    openModal('login');
+    return;
+  }
+
+  const payload = {
+    userId: state.user.id,
+    name: document.getElementById('botName').value.trim(),
+    prefix: document.getElementById('botPrefix').value.trim(),
+    size: Number(document.getElementById('botSize').value),
+    region: document.getElementById('botRegion').value
+  };
+
+  try {
+    const result = await apiRequest('/add-bot', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    alert(result.message);
+    botForm.reset();
+    document.getElementById('botPrefix').value = '!';
+    document.getElementById('botSize').value = 20;
+    await loadDashboard(state.user.id);
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+topupForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!state.user) {
+    openModal('login');
+    return;
+  }
+
+  try {
+    const result = await apiRequest('/topup-coins', {
+      method: 'POST',
+      body: JSON.stringify({ userId: state.user.id, amount: Number(document.getElementById('topupAmount').value) })
+    });
+
+    alert(result.message);
+    await loadDashboard(state.user.id);
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  clearSession();
+  renderPlans();
+  closeModal();
+});
+
+window.addEventListener('click', (event) => {
+  if (event.target === authModal) {
+    closeModal();
+  }
+});
+
+init();

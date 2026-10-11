@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARKO | Discord Bot Hosting</title>
+    <meta
+      name="description"
+      content="MARKO provides secure, fast and powerful Discord bot hosting with custom plans, coins, dashboards, and always-on uptime."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="container nav">
+          <div class="brand">
+            <span class="brand-mark">M</span>
+            <span>MARKO</span>
+          </div>
+
+          <nav class="main-nav">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+
+          <div class="nav-actions">
+            <button id="loginBtn" class="ghost-btn">Login</button>
+            <button id="signupBtn" class="primary-btn">Create Account</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="container hero-grid">
+            <div class="hero-copy">
+              <span class="eyebrow">Always online • Secure • Fast</span>
+              <h1>Host your Discord bots with power, speed, and full control.</h1>
+              <p>
+                MARKO gives you premium hosting with scalable storage, coin-based billing,
+                24/7 uptime, easy bot deployment, and a management dashboard built for growth.
+              </p>
+              <div class="hero-actions">
+                <button id="heroSignup" class="primary-btn large">Start Now</button>
+                <button id="viewPricingBtn" class="secondary-btn large">View Pricing</button>
+              </div>
+
+              <div class="hero-metrics">
+                <div>
+                  <strong>99.9%</strong>
+                  <span>uptime</span>
+                </div>
+                <div>
+                  <strong>24/7</strong>
+                  <span>monitoring</span>
+                </div>
+                <div>
+                  <strong>6k+</strong>
+                  <span>bots hosted</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-panel">
+              <div class="glow-card">
+                <div class="panel-header">
+                  <span class="panel-pill">Live Status</span>
+                  <span class="dot online"></span>
+                </div>
+                <div class="panel-bot">
+                  <div class="bot-avatar">M</div>
+                  <div>
+                    <h3>Mira Bot</h3>
+                    <p>Online • Europe • 1 GB</p>
+                  </div>
+                </div>
+                <ul class="status-list">
+                  <li><span>Memory</span><strong>1 GB</strong></li>
+                  <li><span>Storage</span><strong>20 GB</strong></li>
+                  <li><span>Uptime</span><strong>99.9%</strong></li>
+                  <li><span>Coins</span><strong>1,500</strong></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" class="section">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Why MARKO</span>
+              <h2>Everything you need to run a bot business</h2>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Instant Deployment</h3>
+                <p>Launch your bots in seconds with pre-configured environments and automatic setup.</p>
+              </article>
+
+              <article class="feature-card">
+                <div class="icon">🛡️</div>
+                <h3>Secure Hosting</h3>
+                <p>Protected infrastructure with monitoring, backups, and performance checks.</p>
+              </article>
+
+              <article class="feature-card">
+                <div class="icon">💰</div>
+                <h3>Coins & Credits</h3>
+                <p>Flexible coin balance, top-ups, and package upgrades for every level of growth.</p>
+              </article>
+
+              <article class="feature-card">
+                <div class="icon">📦</div>
+                <h3>Custom Storage</h3>
+                <p>Choose your resources, define your bot size, and control every GB by plan.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" class="section prices">
+          <div class="container">
+            <div class="section-heading centered">
+              <span class="eyebrow">Plans & Pricing</span>
+              <h2>Simple pricing for every bot owner</h2>
+            </div>
+            <div id="plansGrid" class="plans-grid"></div>
+          </div>
+        </section>
+
+        <section class="section steps-section">
+          <div class="container">
+            <div class="section-heading centered">
+              <span class="eyebrow">How it works</span>
+              <h2>Three quick steps to launch</h2>
+            </div>
+
+            <div class="steps-grid">
+              <div class="step-card">
+                <span class="step-number">1</span>
+                <h3>Create Account</h3>
+                <p>Register with your email and create your MARKO profile.</p>
+              </div>
+              <div class="step-card">
+                <span class="step-number">2</span>
+                <h3>Choose Plan</h3>
+                <p>Pick a plan, set your storage, and buy using your coins.</p>
+              </div>
+              <div class="step-card">
+                <span class="step-number">3</span>
+                <h3>Deploy Bot</h3>
+                <p>Launch your bot and monitor your uptime from the dashboard.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="dashboard" class="section dashboard-section">
+          <div class="container">
+            <div class="section-heading">
+              <span class="eyebrow">Client Dashboard</span>
+              <h2>Manage bots, coins, and server limits</h2>
+            </div>
+
+            <div id="dashboardShell" class="dashboard-shell hidden">
+              <aside class="dashboard-sidebar">
+                <div class="profile-card">
+                  <div class="profile-avatar" id="dashboardAvatar">U</div>
+                  <div>
+                    <h3 id="dashboardName">User Name</h3>
+                    <p id="dashboardPlan">Starter</p>
+                  </div>
+                </div>
+
+                <ul class="sidebar-list">
+                  <li><span>Coins</span><strong id="dashboardCoins">0</strong></li>
+                  <li><span>Storage</span><strong id="dashboardStorage">0 GB</strong></li>
+                  <li><span>Role</span><strong id="dashboardRole">User</strong></li>
+                </ul>
+
+                <button id="logoutBtn" class="ghost-btn full">Logout</button>
+              </aside>
+
+              <div class="dashboard-main">
+                <div class="stats-row">
+                  <div class="mini-stat">
+                    <span>Total Bots</span>
+                    <strong id="statBots">0</strong>
+                  </div>
+                  <div class="mini-stat">
+                    <span>Online</span>
+                    <strong id="statOnline">0</strong>
+                  </div>
+                  <div class="mini-stat">
+                    <span>Used Storage</span>
+                    <strong id="statStorageUsed">0 GB</strong>
+                  </div>
+                </div>
+
+                <div class="panel-grid">
+                  <div class="panel-card">
+                    <div class="panel-card-header">
+                      <h3>Deploy New Bot</h3>
+                    </div>
+                    <form id="botForm" class="stack-form">
+                      <input type="text" id="botName" placeholder="Bot name" required />
+                      <input type="text" id="botPrefix" placeholder="Command prefix" value="!" required />
+                      <input type="number" id="botSize" min="5" max="300" value="20" placeholder="Storage (GB)" required />
+                      <select id="botRegion">
+                        <option value="Europe">Europe</option>
+                        <option value="North America">North America</option>
+                        <option value="Asia">Asia</option>
+                      </select>
+                      <button type="submit" class="primary-btn">Deploy Bot</button>
+                    </form>
+                  </div>
+
+                  <div class="panel-card">
+                    <div class="panel-card-header">
+                      <h3>Coins Top-up</h3>
+                    </div>
+                    <form id="topupForm" class="stack-form">
+                      <input type="number" id="topupAmount" min="25" step="25" value="200" placeholder="Coins amount" required />
+                      <button type="submit" class="secondary-btn">Add Coins</button>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="panel-card wide">
+                  <div class="panel-card-header">
+                    <h3>Your Bots</h3>
+                  </div>
+                  <div id="botList" class="bot-list"></div>
+                </div>
+
+                <div id="adminPanel" class="panel-card wide hidden">
+                  <div class="panel-card-header">
+                    <h3>Admin overview</h3>
+                  </div>
+                  <div id="adminStats" class="admin-stats"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" class="section faq-section">
+          <div class="container small-container">
+            <div class="section-heading centered">
+              <span class="eyebrow">FAQ</span>
+              <h2>Common questions</h2>
+            </div>
+
+            <div class="faq-list">
+              <div class="faq-item">
+                <h3>Do I need technical knowledge?</h3>
+                <p>No. MARKO is designed to be simple and user-friendly for beginners and advanced bot owners.</p>
+              </div>
+              <div class="faq-item">
+                <h3>Can I upgrade anytime?</h3>
+                <p>Yes. You can change your plan or top up coins whenever you want from the dashboard.</p>
+              </div>
+              <div class="faq-item">
+                <h3>Are the bots always online?</h3>
+                <p>Yes. We run them on always-on infrastructure with monitoring and failover support.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container footer-inner">
+          <div>
+            <div class="brand footer-brand">
+              <span class="brand-mark">M</span>
+              <span>MARKO</span>
+            </div>
+            <p>Discord bot hosting built for speed, control and reliability.</p>
+          </div>
+          <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#dashboard">Dashboard</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div id="authModal" class="modal hidden">
+      <div class="modal-card">
+        <button id="closeModalBtn" class="close-btn">×</button>
+        <div class="modal-header">
+          <span id="modalTitle">Login</span>
+        </div>
+
+        <form id="authForm" class="stack-form">
+          <input type="text" id="userName" placeholder="Full name" class="hidden-on-login" />
+          <input type="email" id="userEmail" placeholder="Email address" required />
+          <input type="password" id="userPassword" placeholder="Password" required />
+          <button id="authSubmitBtn" type="submit" class="primary-btn">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

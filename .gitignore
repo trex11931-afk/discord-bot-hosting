@@ -1,0 +1,72 @@
+{
+  "plans": [
+    {
+      "id": "starter",
+      "name": "Starter",
+      "price": 40,
+      "coins": 200,
+      "storage": 40,
+      "features": [
+        "1 bot",
+        "24/7 uptime",
+        "5 GB storage",
+        "Basic support"
+      ],
+      "popular": false
+    },
+    {
+      "id": "pro",
+      "name": "Pro",
+      "price": 90,
+      "coins": 500,
+      "storage": 120,
+      "features": [
+        "Unlimited bots",
+        "Priority support",
+        "Auto backups",
+        "Custom domains"
+      ],
+      "popular": true
+    },
+    {
+      "id": "vip",
+      "name": "VIP",
+      "price": 180,
+      "coins": 900,
+      "storage": 300,
+      "features": [
+        "Dedicated resources",
+        "Advanced monitoring",
+        "Premium support",
+        "White-label"
+      ],
+      "popular": false
+    }
+  ],
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "Admin",
+      "email": "admin@marko.host",
+      "password": "admin123",
+      "coins": 5000,
+      "storageLimit": 300,
+      "plan": "VIP",
+      "role": "admin"
+    }
+  ],
+  "bots": [
+    {
+      "id": "bot-1",
+      "ownerId": "admin-1",
+      "name": "Mira Bot",
+      "prefix": "!",
+      "region": "Europe",
+      "memory": "1 GB",
+      "storage": 20,
+      "status": "online",
+      "uptime": "99.9%"
+    }
+  ]
+}
+
